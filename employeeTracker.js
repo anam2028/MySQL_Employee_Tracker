@@ -19,7 +19,7 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
-  connection.end();
+  //connection.end();
 });
 
 function afterConnection() {
@@ -75,6 +75,7 @@ inquirer.prompt([
       console.log("Thanks You for using this program!")
     }
   })
+
 
 // Write a function for selections
 // refer iceCreamCRUD activity
@@ -151,7 +152,7 @@ function readEmployees() {
     if (err) throw err;
     // Log all results of the SELECT statement
     console.log(res);
-    connection.end();
+   //connection.end();
   });
 }
 
@@ -169,15 +170,14 @@ function addDepartment() {
       if (err) throw err;
       console.log(res.affectedRows + " Department added for employee!\n");
       // Call updateEmployee AFTER the ADD completes
-      // updateEmployeeRole();
-    }
-  );
+     // updateEmployeeRole();
+   
 
   // logs the actual query being run
   console.log(query.sql);
 }
-
-//write a function to add roles
+  )}
+//write a function to add employee roles
 
 function addEmployeeRole() {
   console.log("Adding employee role for a employee...\n");
