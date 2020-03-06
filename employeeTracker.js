@@ -16,6 +16,7 @@ var connection = mysql.createConnection({
   database: "employee_trackerDB"
 });
 
+
 connection.connect(function (err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
@@ -38,7 +39,7 @@ inquirer.prompt([
     type: "list",
     name: "choose",
     message: "What would you like to do?:",
-    choices: ['Add Department', 'Add Employee', 'Remove Employee', 'Update Employee Role', 'Update Employee Manager',
+    choices: ['Add Department', 'Add Employee Role','Add Employee', 'Remove Employee', 'Update Employee Role', 'Update Employee Manager',
       'View All Employees', 'View All Employess by Department', 'View All Employees by Manager']
   }
 ])
@@ -170,7 +171,7 @@ function addDepartment() {
       if (err) throw err;
       console.log(res.affectedRows + " Department added for employee!\n");
       // Call updateEmployee AFTER the ADD completes
-     // updateEmployeeRole();
+     addEmployeeRole();
    
 
   // logs the actual query being run
@@ -185,7 +186,7 @@ function addEmployeeRole() {
     "INSERT INTO role SET ?",
     {
       id: 1,
-      department_id: 100,
+      department_id:100,
       title: "Sales",
       salary: 100000
     },
@@ -193,7 +194,7 @@ function addEmployeeRole() {
       if (err) throw err;
       console.log(res.affectedRows + " Employee role added!\n");
       // Call updateEmployee AFTER the ADD completes
-      updateEmployeeRole();
+      addEmployee();
     }
   );
 
