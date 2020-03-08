@@ -98,7 +98,6 @@ function addDepartment() {
   var query = connection.query(
     "INSERT INTO department SET ?",
     {
-      id:3,
       name: answers.adddept
     },
     function (err, res) {
