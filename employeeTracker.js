@@ -81,9 +81,95 @@ inquirer.prompt([
 // Write a function for selections
 // refer iceCreamCRUD activity
 
+// write a function to add department
+
+function addDepartment() {
+  inquirer.prompt([
+
+    {
+      type: "list",
+      name: "adddept",
+      message: "What department to add",
+      choices: ['Sales','Engineering','IT','legal','Finance']
+    }
+  ])
+    .then(function (answers) {
+  console.log("Adding department for a employee...\n");
+  var query = connection.query(
+    "INSERT INTO department SET ?",
+    {
+      id:3,
+      name: answers.adddept
+    },
+    function (err, res) {
+      if (err) throw err;
+      console.log(res.affectedRows + " Department added for employee!\n");
+     addEmployeeRole();
+    })
+    })
+  }
+  // console.log(query.sql);
+  
+//write a function to add employee roles
+
+function addEmployeeRole() {
+  inquirer.prompt([
+    {
+      type: "list",
+      name: "addrole",
+      message: "What is the role for employee",
+      choices: ['Sales Lead', 'Sales Person','Lead Engineer','Software Engineer','Accountant','Legal Team Lead', 'Lawyer']
+    }
+  ])
+    .then(function (answers) {
+  console.log("Adding employee role for a employee...\n");
+  var query = connection.query(
+    "INSERT INTO role SET ?",
+    {
+      id: 7,
+      department_id:1,
+      title: answers.addrole,
+      salary: 100000
+    },
+    function (err, res) {
+      if (err) throw err;
+      console.log(res.affectedRows + " Employee role added!\n");
+      // Call updateEmployee AFTER the ADD completes
+      addEmployee();
+    }
+  );
+
+  // logs the actual query being run
+  console.log(query.sql);
+    })
+}
+
 // functions for employee table
 
 function addEmployee() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "fname",
+      message: "What is the first name of employee",
+    },
+    {
+      type: "input",
+      name: "lname",
+      message: "What is the last name of employee",
+    },
+    {
+      type: "input",
+      name: "rid",
+      message: "What is the role id of employee",
+    },
+    {
+      type: "input",
+      name: "mid",
+      message: "What is the manager id of employee",
+    }
+  ])
+    .then(function (answers) {
   console.log("Adding a new employee...\n");
   var query = connection.query(
     "INSERT INTO employee SET ?",
@@ -104,26 +190,34 @@ function addEmployee() {
 
   // logs the actual query being run
   console.log(query.sql);
+})
+
 }
-
-
 function updateEmployeeRole() {
+  inquirer.prompt([
+    {
+      type: "list",
+      name: "updaterole",
+      message: "Select the role to be updated for employee",
+      choices: ['Sales Lead', 'Sales Person','Lead Engineer','Software Engineer','Accountant','Legal Team Lead', 'Lawyer']
+    }
+  ])
   console.log("Updating employee role...\n");
   var query = connection.query(
     "UPDATE employee SET ? WHERE ?",
     [
       {
-        id: 100
+        id: 8
       },
       {
-        role_id: 1
+        role_id: 2
       }
     ],
     function (err, res) {
       if (err) throw err;
       console.log(res.affectedRows + " employee role updated!\n");
       // Call deleteProduct AFTER the UPDATE completes
-      deleteProduct();
+      removeEmployee();
     }
   );
 
@@ -132,7 +226,13 @@ function updateEmployeeRole() {
 }
 
 function removeEmployee() {
-  console.log("Deleting all strawberry icecream...\n");
+  inquirer.prompt([
+    {
+    type:"input",
+    id: 1
+    }
+  ])
+  console.log("Removing the employee from database...\n");
   connection.query(
     "DELETE FROM employee WHERE ?",
     {
@@ -157,47 +257,3 @@ function readEmployees() {
   });
 }
 
-// write a function to add department
-
-function addDepartment() {
-  console.log("Adding department for a employee...\n");
-  var query = connection.query(
-    "INSERT INTO department SET ?",
-    {
-      id: 100,
-      name: "Sales"
-    },
-    function (err, res) {
-      if (err) throw err;
-      console.log(res.affectedRows + " Department added for employee!\n");
-      // Call updateEmployee AFTER the ADD completes
-     addEmployeeRole();
-   
-
-  // logs the actual query being run
-  console.log(query.sql);
-}
-  )}
-//write a function to add employee roles
-
-function addEmployeeRole() {
-  console.log("Adding employee role for a employee...\n");
-  var query = connection.query(
-    "INSERT INTO role SET ?",
-    {
-      id: 1,
-      department_id:100,
-      title: "Sales",
-      salary: 100000
-    },
-    function (err, res) {
-      if (err) throw err;
-      console.log(res.affectedRows + " Employee role added!\n");
-      // Call updateEmployee AFTER the ADD completes
-      addEmployee();
-    }
-  );
-
-  // logs the actual query being run
-  console.log(query.sql);
-}
