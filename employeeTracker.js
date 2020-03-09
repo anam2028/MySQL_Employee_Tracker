@@ -60,7 +60,7 @@ inquirer.prompt([
       removeEmployee();
     }
     else if (answers.choose === "Update Employee Role") {
-      updateRole();
+      updateEmployeeRole();
     }
     else if (answers.choose === "Update Employee Manager") {
       updateEmployee();
@@ -79,7 +79,6 @@ inquirer.prompt([
 
 // Write a function for selections
 // refer iceCreamCRUD activity
-
 // write a function to add department
 
 function addDepartment() {
@@ -205,7 +204,7 @@ function updateEmployeeRole() {
   inquirer.prompt([
     {
       type: "list",
-      name: "updaterole",
+      name: "id",
       message: "Select the role to be updated for employee",
       choices: ['Sales Lead', 'Sales Person','Lead Engineer','Software Engineer','Accountant','Legal Team Lead', 'Lawyer']
     }
@@ -213,30 +212,26 @@ function updateEmployeeRole() {
   console.log("Updating employee role...\n");
   var query = connection.query(
     "UPDATE employee SET ? WHERE ?",
+    
     [
       {
-        id: 8
+        id:1     // update the current role_id
       },
       {
-        role_id: 2
+        role_id:2     // updated to be
       }
     ],
     function (err, res) {
       if (err) throw err;
       console.log(res.affectedRows + " employee role updated!\n");
       // Call deleteProduct AFTER the UPDATE completes
-      updateEmployeeDept();
+      readEmployees();
     }
   );
 
   // logs the actual query being run
   console.log(query.sql);
 }
-
-function updateEmployeeDept(){
-
-}
-
 function removeEmployee() {
   inquirer.prompt([
     {
@@ -270,5 +265,4 @@ function readEmployees() {
   });
 }
 
-//select id,firstname,lastname,title,salary from emoloyee e, department d, role r join id on e.id = r.id join department_id on r.department_id = d.id
 
