@@ -73,7 +73,7 @@ inquirer.prompt([
       joinByManagerId();
     }
     else {
-      console.log("Thanks You for using this program!")
+      console.log("This program is ended")
     }
   })
 
@@ -115,9 +115,20 @@ function addEmployeeRole() {
   inquirer.prompt([
     {
       type: "list",
-      name: "addrole",
-      message: "What is the role for employee",
+      name: "title",
+      message: "What is the role for employee:",
       choices: ['Sales Lead', 'Sales Person','Lead Engineer','Software Engineer','Accountant','Legal Team Lead', 'Lawyer']
+    },
+    {
+      type: "list",
+      name: "deptid",
+      choices:[1,2,3,4,5,6,7]
+    },
+    {
+      type: "list",
+      name:"salary",
+      message:"Enter the salary:",
+      choices: ["100000","80000","150000","120000","125000","250000","190000"]
     }
   ])
     .then(function (answers) {
@@ -125,10 +136,9 @@ function addEmployeeRole() {
   var query = connection.query(
     "INSERT INTO role SET ?",
     {
-      id: 7,
-      department_id:1,
-      title: answers.addrole,
-      salary: 100000
+      department_id:answers.deptid,
+      title: answers.title,
+      salary: answers.salary
     },
     function (err, res) {
       if (err) throw err;
@@ -165,7 +175,7 @@ function addEmployee() {
     {
       type: "input",
       name: "mid",
-      message: "What is the manager id of employee",
+      message: "Enter manager id of the employee",
     }
   ])
     .then(function (answers) {
@@ -173,17 +183,16 @@ function addEmployee() {
   var query = connection.query(
     "INSERT INTO employee SET ?",
     {
-      id: 1,
-      first_name: "John",
-      last_name: "Doe",
-      role_id: 1,
-      manager_id: 1
+      first_name: answers.fname,
+      last_name: answers.lname,
+      role_id: answers.rid,
+      manager_id:answers.mid
     },
     function (err, res) {
       if (err) throw err;
       console.log(res.affectedRows + " New employee added!\n");
       // Call updateEmployee AFTER the ADD completes
-      updateEmployeeRole();
+      readEmployees();
     }
   );
 
@@ -216,12 +225,16 @@ function updateEmployeeRole() {
       if (err) throw err;
       console.log(res.affectedRows + " employee role updated!\n");
       // Call deleteProduct AFTER the UPDATE completes
-      removeEmployee();
+      updateEmployeeDept();
     }
   );
 
   // logs the actual query being run
   console.log(query.sql);
+}
+
+function updateEmployeeDept(){
+
 }
 
 function removeEmployee() {
@@ -248,11 +261,14 @@ function removeEmployee() {
 
 function readEmployees() {
   console.log("Selecting all employess...\n");
-  connection.query("SELECT * FROM employee", function (err, res) {
+  connection.query("select * from employee", 
+  function (err, res) {
     if (err) throw err;
     // Log all results of the SELECT statement
     console.log(res);
    //connection.end();
   });
 }
+
+//select id,firstname,lastname,title,salary from emoloyee e, department d, role r join id on e.id = r.id join department_id on r.department_id = d.id
 
