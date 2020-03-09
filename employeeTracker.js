@@ -16,7 +16,6 @@ var connection = mysql.createConnection({
   database: "employee_trackerDB"
 });
 
-
 connection.connect(function (err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
@@ -97,6 +96,7 @@ function addDepartment() {
   console.log("Adding department for a employee...\n");
   var query = connection.query(
     "INSERT INTO department SET ?",
+   
     {
       name: answers.adddept
     },
@@ -261,7 +261,7 @@ function removeEmployee() {
 
 function readEmployees() {
   console.log("Selecting all employess...\n");
-  connection.query("select * from employee", 
+  connection.query("select employee.id, first_name,last_name,role.title,salary,department.id,name from employee inner join role on employee.role_id = role.id inner join department on  department.id = role.department_id", 
   function (err, res) {
     if (err) throw err;
     // Log all results of the SELECT statement
